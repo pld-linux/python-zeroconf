@@ -3,7 +3,7 @@
 %bcond_with	integration	# Integration tests work in mock but fail in Koji with PermissionError
 %bcond_with	tests		# unit tests
 %bcond_without	python2		# CPython 2.x module
-%bcond_without	python3		# CPython 3.x module
+%bcond_with	python3		# CPython 3.x module (built from python3-zeroconf.spec)
 
 %define module	zeroconf
 Summary:	Pure Python Multicast DNS Service Discovery Library
@@ -41,6 +41,7 @@ BuildRequires:	python3-six
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
+BuildRequires:	sed >= 4.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -71,7 +72,7 @@ przy użyciu Bonjour/Avahi.
 
 # Remove enum-compat from install_requires
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1432165
-sed -i '/enum-compat/d' setup.py
+%{__sed} -i '/enum-compat/d' setup.py
 
 %build
 %if %{with python2}
